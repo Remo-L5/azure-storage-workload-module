@@ -34,12 +34,12 @@ variable "storage_accounts" {
   description = "Map of storage account definitions to provision. Map keys are referenced by blob containers and file shares."
   type = map(object({
     account_type                  = string
-    account_replication_type      = optional(string)
-    access_tier                   = optional(string)
+    account_replication_type      = optional(string, "LRS")
+    access_tier                   = optional(string, "Hot")
     large_file_share_enabled      = optional(bool)
     public_network_access_enabled = optional(bool, false)
     domain_join_enabled           = optional(bool)
-    file_share_billing_model      = optional(string)
+    file_share_billing_model      = optional(string, "paygo")
     role_assignments = optional(map(object({
       role_definition_id_or_name       = string
       principal_id                     = string
