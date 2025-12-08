@@ -228,7 +228,7 @@ variable "blob_containers" {
 
   validation {
     condition = alltrue([
-      for container in values(var.blob_containers) : length(setsubtract(set(container.storage_account_map_keys), set(keys(var.storage_accounts)))) == 0
+      for container in values(var.blob_containers) : length(setsubtract(toset(container.storage_account_map_keys), set(keys(var.storage_accounts)))) == 0
     ])
     error_message = "blob_containers.*.storage_account_map_keys must reference keys defined in storage_accounts."
   }
@@ -273,7 +273,7 @@ variable "file_shares" {
 
   validation {
     condition = alltrue([
-      for share in values(var.file_shares) : length(setsubtract(set(share.storage_account_map_keys), set(keys(var.storage_accounts)))) == 0
+      for share in values(var.file_shares) : length(setsubtract(toset(share.storage_account_map_keys), set(keys(var.storage_accounts)))) == 0
     ])
     error_message = "file_shares.*.storage_account_map_keys must reference keys defined in storage_accounts."
   }
