@@ -35,11 +35,11 @@ variable "storage_accounts" {
   type = map(object({
     account_type                  = string
     account_replication_type      = optional(string, "LRS")
-    access_tier                   = optional(string, "Hot")
+    access_tier                   = optional(string)
     large_file_share_enabled      = optional(bool)
     public_network_access_enabled = optional(bool, false)
     domain_join_enabled           = optional(bool)
-    file_share_billing_model      = optional(string, "paygo")
+    file_share_billing_model      = optional(string)
     role_assignments = optional(map(object({
       role_definition_id_or_name       = string
       principal_id                     = string
