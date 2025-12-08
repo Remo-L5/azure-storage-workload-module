@@ -1,32 +1,31 @@
 module "storage_account" {
+  for_each = local.storage_accounts
+
   source  = "Azure/avm-res-storage-storageaccount/azurerm"
   version = "0.6.7"
 
-  name                = var.name
+  name                = each.value.name
   location            = var.location
   resource_group_name = var.resource_group_name
 
-  account_kind                      = local.selected_account_type.account_kind
-  account_tier                      = local.selected_account_type.account_tier
-  account_replication_type          = local.resolved_account_replication_type
-  access_tier                       = local.resolved_access_tier
-  is_hns_enabled                    = local.selected_account_type.is_hns_enabled
-  large_file_share_enabled          = local.resolved_large_file_share_enabled
-  nfsv3_enabled                     = local.nfs_requested
-  provisioned_billing_model_version = local.active_share_billing_model == "provisioned_v2" ? "V2" : null
+  account_kind                      = each.value.account_kind
+  account_tier                      = each.value.account_tier
+  account_replication_type          = each.value.account_replication_type
+  access_tier                       = each.value.access_tier
+  is_hns_enabled                    = each.value.is_hns_enabled
+  large_file_share_enabled          = each.value.large_file_share_enabled
+  nfsv3_enabled                     = each.value.nfsv3_enabled
+  provisioned_billing_model_version = each.value.provisioned_billing_model_version
 
-  containers = local.final_containers
-  shares     = local.final_shares
+  containers = each.value.containers
+  shares     = each.value.shares
 
-  azure_files_authentication    = var.azure_files_authentication
-  customer_managed_key          = var.customer_managed_key
+  azure_files_authentication    = each.value.azure_files_authentication
   enable_telemetry              = var.enable_telemetry
-  https_traffic_only_enabled    = var.https_traffic_only_enabled
-  managed_identities            = var.managed_identities
-  min_tls_version               = var.min_tls_version
-  network_rules                 = var.network_rules
-  public_network_access_enabled = var.public_network_access_enabled
-  role_assignments              = var.role_assignments
-  routing                       = var.routing
-  tags                          = var.tags
+  https_traffic_only_enabled    = each.value.https_traffic_only_enabled
+  min_tls_version               = each.value.min_tls_version
+  network_rules                 = each.value.network_rules
+  public_network_access_enabled = each.value.public_network_access_enabled
+  role_assignments              = each.value.role_assignments
+  tags                          = each.value.tags
 }

@@ -1,15 +1,24 @@
-output "resource" {
-  description = "Full storage account object returned by the AVM module."
-  value       = module.storage_account.resource
+output "resources" {
+  description = "Full storage account objects returned by the AVM module, keyed by storage_accounts map key."
+  value = {
+    for key, mod in module.storage_account :
+    key => mod.resource
+  }
 }
 
-output "shares" {
-  description = "Map of file share outputs returned by the AVM module."
-  value       = module.storage_account.shares
-  sensitive   = true
+output "file_shares" {
+  description = "File share outputs returned by the AVM module, keyed by storage_accounts map key."
+  value = {
+    for key, mod in module.storage_account :
+    key => mod.shares
+  }
+  sensitive = true
 }
 
 output "containers" {
-  description = "Map of blob container outputs returned by the AVM module."
-  value       = module.storage_account.containers
+  description = "Blob container outputs returned by the AVM module, keyed by storage_accounts map key."
+  value = {
+    for key, mod in module.storage_account :
+    key => mod.containers
+  }
 }

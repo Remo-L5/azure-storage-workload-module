@@ -8,50 +8,74 @@ Wrapper around `Azure/avm-res-storage-storageaccount/azurerm` that exposes a wor
 
 ## Highlights
 
-- Opinionated defaults per `account_type` (account kind, tier, replication type, hierarchical namespace, HTTPS/TLS, telemetry) aligned with AVM best practices.
-- T-shirt sizing for file shares with enforcement of SMB vs NFS protocol rules.
-- Azure Files authentication, customer-managed keys, managed identities, network rules, routing, and role assignments flow straight through to the underlying AVM module.
-- Guardrails prevent unsupported combos (e.g., blob containers on FileStorage or SMB/NFS shares in `blob_gpv2`).
+- Opinionated defaults per `account_type` plus enforced HTTPS-only and TLS 1.2 to keep every deployment compliant.
+- Define any number of storage accounts via a map, each keyed entry receiving its own AVM deployment with per-account tags and identity/role settings.
+- Central blob container and file share definitions can fan-out into one or many accounts with automatic naming, metadata, and t-shirt sizing.
+- Global network rules and Azure Files authentication settings flow into every eligible account, while a per-account `domain_join_enabled` flag controls if AD integration is applied.
+- Guardrails prevent unsupported combos (e.g., blob containers on FileStorage or NFS shares against `file_gpv2`).
 
 ## Usage
 
 ```hcl
 module "storage_workload" {
-	source = "./"
+  source = "./"
 
-	name                = "${var.prefix}${random_string.suffix.result}"
-	location            = var.location
-	resource_group_name = azurerm_resource_group.workload.name
-	account_type        = "file_gpv2"
+  location               = var.location
+  resource_group_name    = azurerm_resource_group.workload.name
+  application_short_name = "pay"
 
-	network_rules = {
-		default_action             = "Deny"
-		bypass                     = ["AzureServices"]
-		virtual_network_subnet_ids = [azurerm_subnet.private.id]
-	}
+  network_rules = {
+    default_action             = "Deny"
+    bypass                     = ["AzureServices"]
+    virtual_network_subnet_ids = [azurerm_subnet.private.id]
+  }
 
-	file_shares = {
-		profiles = {
-			size     = "medium"
-			protocol = "SMB"
-		}
-		nfs_data = {
-			size     = "xlarge"
-			protocol = "NFS"
-		}
-	}
+  azure_files_authentication = {
+    active_directory = {
+      domain_guid = "00000000-0000-0000-0000-000000000000"
+      domain_name = "contoso.corp"
+    }
+  }
 
-	blob_containers = {
-		ingest = {}
-		archive = {
-			public_access = "None"
-		}
-	}
+  storage_accounts = {
+    lake = {
+      account_type = "blob_gpv2"
+      tags         = { data_classification = "hot" }
+    }
+    files = {
+      account_type             = "file_share_tx"
+      domain_join_enabled      = true
+      file_share_billing_model = "provisioned_v2"
+    }
+  }
 
-	tags = {
-		environment = "dev"
-		workload    = "storage"
-	}
+  blob_containers = {
+    raw = {
+      storage_account_map_keys = ["lake"]
+    }
+    curated = {
+      storage_account_map_keys = ["lake"]
+      default_encryption_scope = azurerm_storage_encryption_scope.curated.id
+    }
+  }
+
+  file_shares = {
+    sap_smb = {
+      storage_account_map_keys = ["files"]
+      size                     = "xlarge"
+      protocol                 = "SMB"
+    }
+    sap_nfs = {
+      storage_account_map_keys = ["files"]
+      size                     = "large"
+      protocol                 = "NFS"
+    }
+  }
+
+  tags = {
+    environment = "dev"
+    workload    = "storage"
+  }
 }
 ```
 
