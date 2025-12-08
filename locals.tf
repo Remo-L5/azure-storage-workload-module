@@ -47,10 +47,10 @@ locals {
   }
 
   access_tier_lookup = {
-    HOT                  = "Hot"
-    COOL                 = "Cool"
-    COLD                 = "Cold"
-    PREMIUM              = "Premium"
+    HOT         = "Hot"
+    COOL        = "Cool"
+    COLD        = "Cold"
+    PREMIUM     = "Premium"
     TRANSACTION = "TransactionOptimized"
   }
 
@@ -189,15 +189,16 @@ locals {
         cfg.file_share_billing_model == null ? null : lower(cfg.file_share_billing_model),
         local.account_type_matrix[lower(cfg.account_type)].share_billing_model
       ) : null
-      containers_supported          = local.account_type_matrix[lower(cfg.account_type)].account_kind == "StorageV2"
-      allow_file_shares             = local.account_type_matrix[lower(cfg.account_type)].allow_file_shares
-      enable_telemetry              = cfg.enable_telemetry
-      https_traffic_only_enabled    = true
-      min_tls_version               = "TLS1_2"
-      public_network_access_enabled = cfg.public_network_access_enabled
-      managed_identities            = cfg.managed_identities
-      network_rules                 = var.network_rules
-      role_assignments              = cfg.role_assignments
+      containers_supported              = local.account_type_matrix[lower(cfg.account_type)].account_kind == "StorageV2"
+      allow_file_shares                 = local.account_type_matrix[lower(cfg.account_type)].allow_file_shares
+      enable_telemetry                  = cfg.enable_telemetry
+      infrastructure_encryption_enabled = true
+      https_traffic_only_enabled        = true
+      min_tls_version                   = "TLS1_2"
+      public_network_access_enabled     = cfg.public_network_access_enabled
+      managed_identities                = cfg.managed_identities
+      network_rules                     = var.network_rules
+      role_assignments                  = cfg.role_assignments
       azure_files_authentication = (
         local.account_type_matrix[lower(cfg.account_type)].allow_file_shares && coalesce(cfg.domain_join_enabled, false)
         ? var.azure_files_authentication

@@ -38,7 +38,7 @@ module "storage_workload" {
   }
 
   storage_accounts = {
-    lake = {
+    blob = {
       account_type = "blob_gpv2"
       tags         = { data_classification = "hot" }
     }
@@ -51,21 +51,21 @@ module "storage_workload" {
 
   blob_containers = {
     raw = {
-      storage_account_map_keys = ["lake"]
+      storage_account_map_keys = ["blob"]
     }
     curated = {
-      storage_account_map_keys = ["lake"]
+      storage_account_map_keys = ["blob"]
       default_encryption_scope = azurerm_storage_encryption_scope.curated.id
     }
   }
 
   file_shares = {
-    sap_smb = {
+    erp_smb = {
       storage_account_map_keys = ["files"]
       size                     = "xlarge"
       protocol                 = "SMB"
     }
-    sap_nfs = {
+    erp_nfs = {
       storage_account_map_keys = ["files"]
       size                     = "large"
       protocol                 = "NFS"

@@ -20,12 +20,13 @@ module "storage_account" {
   containers = each.value.containers
   shares     = each.value.shares
 
-  azure_files_authentication    = each.value.azure_files_authentication
-  enable_telemetry              = var.enable_telemetry
-  https_traffic_only_enabled    = each.value.https_traffic_only_enabled
-  min_tls_version               = each.value.min_tls_version
-  network_rules                 = each.value.network_rules
-  public_network_access_enabled = each.value.public_network_access_enabled
-  role_assignments              = each.value.role_assignments
-  tags                          = each.value.tags
+  azure_files_authentication        = each.value.azure_files_authentication
+  enable_telemetry                  = var.enable_telemetry
+  infrastructure_encryption_enabled = each.value.infrastructure_encryption_enabled
+  https_traffic_only_enabled        = each.value.https_traffic_only_enabled
+  min_tls_version                   = each.value.min_tls_version
+  network_rules                     = each.value.network_rules
+  public_network_access_enabled     = each.value.public_network_access_enabled
+  role_assignments                  = each.value.role_assignments
+  tags                              = each.value.tags
 }

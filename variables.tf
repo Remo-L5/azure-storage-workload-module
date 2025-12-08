@@ -38,16 +38,16 @@ variable "storage_accounts" {
     access_tier                   = optional(string)
     large_file_share_enabled      = optional(bool)
     public_network_access_enabled = optional(bool, false)
-    domain_join_enabled      = optional(bool)
-    file_share_billing_model = optional(string)
+    domain_join_enabled           = optional(bool)
+    file_share_billing_model      = optional(string)
     role_assignments = optional(map(object({
-      role_definition_id_or_name             = string
-      principal_id                           = string
-      principal_type                         = optional(string, null)
-      description                            = optional(string, null)
-      skip_service_principal_aad_check       = optional(bool, false)
-      condition                              = optional(string, null)
-      condition_version                      = optional(string, null)
+      role_definition_id_or_name       = string
+      principal_id                     = string
+      principal_type                   = optional(string, null)
+      description                      = optional(string, null)
+      skip_service_principal_aad_check = optional(bool, false)
+      condition                        = optional(string, null)
+      condition_version                = optional(string, null)
     })), {})
   }))
 
@@ -208,13 +208,13 @@ variable "blob_containers" {
     prevent_encryption_scope_override = optional(bool)
     versioning_enabled                = optional(bool, false)
     role_assignments = optional(map(object({
-      role_definition_id_or_name             = string
-      principal_id                           = string
-      principal_type                         = optional(string, null)
-      description                            = optional(string, null)
-      skip_service_principal_aad_check       = optional(bool, false)
-      condition                              = optional(string, null)
-      condition_version                      = optional(string, null)
+      role_definition_id_or_name       = string
+      principal_id                     = string
+      principal_type                   = optional(string, null)
+      description                      = optional(string, null)
+      skip_service_principal_aad_check = optional(bool, false)
+      condition                        = optional(string, null)
+      condition_version                = optional(string, null)
     })), {})
   }))
   default = {}
@@ -253,13 +253,13 @@ variable "file_shares" {
     access_tier              = optional(string)
     metadata                 = optional(map(string), {})
     role_assignments = optional(map(object({
-      role_definition_id_or_name             = string
-      principal_id                           = string
-      principal_type                         = optional(string, null)
-      description                            = optional(string, null)
-      skip_service_principal_aad_check       = optional(bool, false)
-      condition                              = optional(string, null)
-      condition_version                      = optional(string, null)
+      role_definition_id_or_name       = string
+      principal_id                     = string
+      principal_type                   = optional(string, null)
+      description                      = optional(string, null)
+      skip_service_principal_aad_check = optional(bool, false)
+      condition                        = optional(string, null)
+      condition_version                = optional(string, null)
     })), {})
   }))
   default = {}
