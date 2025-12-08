@@ -75,10 +75,10 @@ variable "storage_accounts" {
 
   validation {
     condition = alltrue([
-      for acct in values(var.storage_accounts) : (
-        lower(acct.account_type) != "file_share_tx" ||
-        acct.account_replication_type == null ||
-        contains(["LRS", "ZRS"], upper(acct.account_replication_type))
+      for acct_k, acct_v in values(var.storage_accounts) : (
+        lower(acct_v.account_type) != "file_share_tx" ||
+        acct_v.account_replication_type == null ||
+        contains(["LRS", "ZRS"], upper(acct_v.account_replication_type))
       )
     ])
     error_message = "file_share_tx accounts support only LRS or ZRS replication."
@@ -86,9 +86,9 @@ variable "storage_accounts" {
 
   validation {
     condition = alltrue([
-      for acct in values(var.storage_accounts) : (
-        acct.access_tier == null ||
-        contains(["HOT", "COOL", "COLD", "PREMIUM"], upper(acct.access_tier))
+      for acct_k, acct_v in values(var.storage_accounts) : (
+        acct_v.access_tier == null ||
+        contains(["HOT", "COOL", "COLD", "PREMIUM"], upper(acct_v.access_tier))
       )
     ])
     error_message = "storage_accounts.*.access_tier must be Hot, Cool, Cold, or Premium."
@@ -96,8 +96,8 @@ variable "storage_accounts" {
 
   validation {
     condition = alltrue([
-      for acct in values(var.storage_accounts) : (
-        lower(acct.account_type) != "file_share_tx" || acct.access_tier == null
+      for acct_k, acct_v in values(var.storage_accounts) : (
+        lower(acct_v.account_type) != "file_share_tx" || acct_v.access_tier == null
       )
     ])
     error_message = "Do not set access_tier for file_share_tx entries (FileStorage accounts always use Premium)."
@@ -105,9 +105,9 @@ variable "storage_accounts" {
 
   validation {
     condition = alltrue([
-      for acct in values(var.storage_accounts) : (
-        acct.file_share_billing_model == null ||
-        contains(["paygo", "provisioned_v2"], lower(acct.file_share_billing_model))
+      for acct_k, acct_v in values(var.storage_accounts) : (
+        acct_v.file_share_billing_model == null ||
+        contains(["paygo", "provisioned_v2"], lower(acct_v.file_share_billing_model))
       )
     ])
     error_message = "storage_accounts.*.file_share_billing_model must be paygo or provisioned_v2 when supplied."
@@ -115,13 +115,13 @@ variable "storage_accounts" {
 
   validation {
     condition = alltrue([
-      for acct in values(var.storage_accounts) : (
-        acct.file_share_billing_model == null ||
+      for acct_k, acct_v in values(var.storage_accounts) : (
+        acct_v.file_share_billing_model == null ||
         (
-          lower(acct.file_share_billing_model) == "paygo" && lower(acct.account_type) == "file_gpv2"
+          lower(acct_v.file_share_billing_model) == "paygo" && lower(acct_v.account_type) == "file_gpv2"
         ) ||
         (
-          lower(acct.file_share_billing_model) == "provisioned_v2" && lower(acct.account_type) == "file_share_tx"
+          lower(acct_v.file_share_billing_model) == "provisioned_v2" && lower(acct_v.account_type) == "file_share_tx"
         )
       )
     ])

@@ -55,7 +55,7 @@ module "storage_workload" {
     }
     curated = {
       storage_account_map_keys = ["blob"]
-      default_encryption_scope = azurerm_storage_encryption_scope.curated.id
+      default_encryption_scope = true
     }
   }
 
