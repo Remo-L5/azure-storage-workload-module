@@ -87,7 +87,7 @@ locals {
 
   blob_container_roots = {
     for key, container in var.blob_containers :
-    key => lower(coalesce(container.name_override, "${var.application_short_name}-${key}"))
+    key => lower("${var.application_short_name}-${key}")
   }
 
   blob_container_sanitized = {
@@ -110,7 +110,7 @@ locals {
 
   file_share_roots = {
     for key, share in var.file_shares :
-    key => lower(coalesce(share.name_override, "${var.application_short_name}-${key}"))
+    key => lower("${var.application_short_name}-${key}")
   }
 
   file_share_sanitized = {
