@@ -236,7 +236,7 @@ locals {
         cfg.access_tier == null ? null : local.access_tier_lookup[upper(cfg.access_tier)],
         local.account_type_matrix[lower(cfg.account_type)].access_tier
       )
-      is_hns_enabled           = false
+      is_hns_enabled           = lookup(local.nfsv3_enabled_by_account, key, false)
       large_file_share_enabled = coalesce(cfg.large_file_share_enabled, local.account_type_matrix[lower(cfg.account_type)].default_large_share)
       active_share_billing_model = local.account_type_matrix[lower(cfg.account_type)].allow_file_shares ? coalesce(
         cfg.file_share_billing_model == null ? null : lower(cfg.file_share_billing_model),
