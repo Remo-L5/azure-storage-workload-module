@@ -293,10 +293,10 @@ locals {
   }
 
   nfsv3_enabled_by_account = {
-    for key, shares in local.file_shares_by_account :
+    for key in local.storage_account_keys :
     key => length([
-      for share in values(shares) : share
-      if share.enabled_protocol == "NFS"
+      for share_key, share in var.file_shares : share
+      if contains(share.storage_account_map_keys, key) && upper(coalesce(share.protocol, "SMB")) == "NFS"
     ]) > 0
   }
 
