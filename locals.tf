@@ -253,6 +253,7 @@ locals {
       account_kind                      = account.account_kind
       account_tier                      = account.account_tier
       account_replication_type          = account.account_replication_type
+      infrastructure_encryption_enabled = account.infrastructure_encryption_enabled
       access_tier                       = account.access_tier
       is_hns_enabled                    = account.is_hns_enabled
       large_file_share_enabled          = account.large_file_share_enabled

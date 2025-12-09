@@ -87,7 +87,7 @@ variable "storage_accounts" {
   validation {
     condition = alltrue([
       for acct_k, acct_v in values(var.storage_accounts) : (
-        acct_v.access_tier == null ||
+        (acct_v.access_tier == null && lower(acct_v.account_type) == "file_share_tx") ||
         contains(["HOT", "COOL", "COLD", "PREMIUM"], upper(acct_v.access_tier))
       )
     ])
