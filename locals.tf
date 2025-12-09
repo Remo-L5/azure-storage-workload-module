@@ -63,13 +63,13 @@ locals {
 
   account_name_sanitized = {
     for key, root in local.account_name_roots :
-    key => regexreplace(root, "[^0-9a-z]", "")
+    key => replace(root, "[^0-9a-z]", "")
   }
 
   account_name_with_fallback = {
     for key, sanitized in local.account_name_sanitized :
     key => (sanitized != "" ? sanitized : substr(
-      "st${regexreplace(lower(var.application_short_name), "[^0-9a-z]", "")}${md5(key)}",
+      "st${replace(lower(var.application_short_name), "[^0-9a-z]", "")}${md5(key)}",
       0,
       24
     ))
@@ -92,9 +92,9 @@ locals {
 
   blob_container_sanitized = {
     for key, root in local.blob_container_roots :
-    key => regexreplace(
-      regexreplace(
-        regexreplace(root, "[^0-9a-z-]", "-"),
+    key => replace(
+      replace(
+        replace(root, "[^0-9a-z-]", "-"),
         "-+",
         "-"
       ),
@@ -115,9 +115,9 @@ locals {
 
   file_share_sanitized = {
     for key, root in local.file_share_roots :
-    key => regexreplace(
-      regexreplace(
-        regexreplace(root, "[^0-9a-z-]", "-"),
+    key => replace(
+      replace(
+        replace(root, "[^0-9a-z-]", "-"),
         "-+",
         "-"
       ),
