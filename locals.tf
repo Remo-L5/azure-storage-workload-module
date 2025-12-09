@@ -63,13 +63,13 @@ locals {
 
   account_name_sanitized = {
     for key, root in local.account_name_roots :
-    key => replace(root, "[+-_*]*", "")
+    key => replace(root, "[-+_*]*", "")
   }
 
   account_name_with_fallback = {
     for key, sanitized in local.account_name_sanitized :
     key => (sanitized != "" ? sanitized : substr(
-      "st${replace(lower(var.application_short_name), "[+-_*]*", "")}${md5(key)}",
+      "st${replace(lower(var.application_short_name), "[-+_*]*", "")}${md5(key)}",
       0,
       24
     ))
@@ -94,7 +94,7 @@ locals {
     for key, root in local.blob_container_roots :
     key => replace(
       replace(
-        replace(root, "[+-_*]*", "-"),
+        replace(root, "[-+_*]*", "-"),
         "-+",
         "-"
       ),
@@ -117,7 +117,7 @@ locals {
     for key, root in local.file_share_roots :
     key => replace(
       replace(
-        replace(root, "[+-_*]*]", "-"),
+        replace(root, "[-+_*]*]", "-"),
         "-+",
         "-"
       ),
