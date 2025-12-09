@@ -28,5 +28,5 @@ module "storage_account" {
   network_rules                     = each.value.network_rules
   public_network_access_enabled     = each.value.public_network_access_enabled
   role_assignments                  = each.value.role_assignments
-  tags                              = each.value.tags
+  tags                              = var.tags
 }
