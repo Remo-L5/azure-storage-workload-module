@@ -63,13 +63,37 @@ locals {
 
   account_name_sanitized = {
     for key, root in local.account_name_roots :
-    key => replace(root, "[-+_*]*", "")
+    key => replace(
+      replace(
+        replace(
+          replace(root, "-", ""),
+          "+",
+          ""
+        ),
+        "_",
+        ""
+      ),
+      "*",
+      ""
+    )
   }
 
   account_name_with_fallback = {
     for key, sanitized in local.account_name_sanitized :
     key => (sanitized != "" ? sanitized : substr(
-      "st${replace(lower(var.application_short_name), "[-+_*]*", "")}${md5(key)}",
+      "st${replace(
+        replace(
+          replace(
+            replace(lower(var.application_short_name), "-", ""),
+            "+",
+            ""
+          ),
+          "_",
+          ""
+        ),
+        "*",
+        ""
+      )}${md5(key)}",
       0,
       24
     ))
@@ -92,14 +116,29 @@ locals {
 
   blob_container_sanitized = {
     for key, root in local.blob_container_roots :
-    key => replace(
+    key => trim(
       replace(
-        replace(root, "[-+_*]*", "-"),
-        "-+",
+        replace(
+          replace(
+            replace(
+              replace(
+                replace(root, "+", "-"),
+                "_",
+                "-"
+              ),
+              "*",
+              "-"
+            ),
+            "--",
+            "-"
+          ),
+          "--",
+          "-"
+        ),
+        "--",
         "-"
       ),
-      "^-|-$",
-      ""
+      "-"
     )
   }
 
@@ -115,14 +154,29 @@ locals {
 
   file_share_sanitized = {
     for key, root in local.file_share_roots :
-    key => replace(
+    key => trim(
       replace(
-        replace(root, "[-+_*]*]", "-"),
-        "-+",
+        replace(
+          replace(
+            replace(
+              replace(
+                replace(root, "+", "-"),
+                "_",
+                "-"
+              ),
+              "*",
+              "-"
+            ),
+            "--",
+            "-"
+          ),
+          "--",
+          "-"
+        ),
+        "--",
         "-"
       ),
-      "^-|-$",
-      ""
+      "-"
     )
   }
 
