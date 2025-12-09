@@ -315,7 +315,7 @@ locals {
       access_tier                       = account.access_tier
       is_hns_enabled                    = account.is_hns_enabled
       large_file_share_enabled          = account.large_file_share_enabled
-      nfsv3_enabled                     = lookup(local.nfsv3_enabled_by_account, key, false)
+      nfsv3_enabled                     = account.account_kind == "FileStorage" ? null : lookup(local.nfsv3_enabled_by_account, key, false)
       provisioned_billing_model_version = account.active_share_billing_model == "provisioned_v2" ? "V2" : null
       containers                        = lookup(local.blob_containers_by_account, key, {})
       shares                            = lookup(local.file_shares_by_account, key, {})
