@@ -250,7 +250,7 @@ variable "file_shares" {
     size                     = optional(string)
     quota_gb                 = optional(number)
     protocol                 = optional(string, "SMB")
-    access_tier              = optional(string)
+    access_tier              = optional(string, "Hot")
     metadata                 = optional(map(string), {})
     role_assignments = optional(map(object({
       role_definition_id_or_name       = string
