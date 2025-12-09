@@ -22,7 +22,7 @@ locals {
       account_kind             = "FileStorage"
       account_tier             = "Premium"
       account_replication_type = "ZRS"
-      access_tier              = null
+      access_tier              = "Premium"
       allow_file_shares        = true
       default_large_share      = true
       share_billing_model      = "provisioned_v2"
@@ -178,7 +178,7 @@ locals {
         cfg.account_replication_type == null ? null : upper(cfg.account_replication_type),
         local.account_type_matrix[lower(cfg.account_type)].account_replication_type
       )
-      access_tier = local.account_type_matrix[lower(cfg.account_type)].account_kind == "FileStorage" ? null : coalesce(
+      access_tier = coalesce(
         cfg.access_tier == null ? null : local.access_tier_lookup[upper(cfg.access_tier)],
         local.account_type_matrix[lower(cfg.account_type)].access_tier
       )

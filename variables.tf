@@ -97,10 +97,10 @@ variable "storage_accounts" {
   validation {
     condition = alltrue([
       for acct_k, acct_v in values(var.storage_accounts) : (
-        lower(acct_v.account_type) != "file_share_tx" || acct_v.access_tier == null
+        lower(acct_v.account_type) != "file_share_tx" || acct_v.access_tier == null || upper(acct_v.access_tier) == "PREMIUM"
       )
     ])
-    error_message = "Do not set access_tier for file_share_tx entries (FileStorage accounts always use Premium)."
+    error_message = "file_share_tx entries must omit access_tier or set it to Premium."
   }
 
   validation {
