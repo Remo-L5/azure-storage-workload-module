@@ -266,7 +266,6 @@ locals {
       network_rules                     = account.network_rules
       public_network_access_enabled     = account.public_network_access_enabled
       role_assignments                  = account.role_assignments
-      tags                              = account.tags
     }
   }
 }
