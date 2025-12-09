@@ -145,7 +145,6 @@ locals {
         container.default_encryption_scope == null ? {} : { default_encryption_scope = container.default_encryption_scope },
         container.prevent_encryption_scope_override == null ? {} : { prevent_encryption_scope_override = container.prevent_encryption_scope_override },
         container.versioning_enabled == null ? {} : { versioning_enabled = container.versioning_enabled },
-        container.immutability_policy == null ? {} : { immutability_policy = container.immutability_policy },
         length(coalesce(container.role_assignments, {})) > 0 ? { role_assignments = container.role_assignments } : {}
       )
     }
@@ -191,12 +190,10 @@ locals {
       ) : null
       containers_supported              = local.account_type_matrix[lower(cfg.account_type)].account_kind == "StorageV2"
       allow_file_shares                 = local.account_type_matrix[lower(cfg.account_type)].allow_file_shares
-      enable_telemetry                  = cfg.enable_telemetry
       infrastructure_encryption_enabled = true
       https_traffic_only_enabled        = true
       min_tls_version                   = "TLS1_2"
       public_network_access_enabled     = cfg.public_network_access_enabled
-      managed_identities                = cfg.managed_identities
       network_rules                     = var.network_rules
       role_assignments                  = cfg.role_assignments
       azure_files_authentication = (
@@ -204,7 +201,6 @@ locals {
         ? var.azure_files_authentication
         : null
       )
-      tags = merge(var.tags, coalesce(cfg.tags, {}))
     }
   }
 
